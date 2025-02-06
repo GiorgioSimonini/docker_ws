@@ -5,7 +5,7 @@ cd "$(dirname "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")"
 
 # ================================= Edit Here ================================ #
 
-IMAGE_NAME=ros1_franka_qb
+IMAGE_NAME=nvidia_ros1_franka_qb
 
 # =============================== Preliminaries ============================== #
 

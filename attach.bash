@@ -1,5 +1,5 @@
 #!/bin/bash
 
 docker exec \
-	-it ros1_dev \
+	-it nvidia_ros1_franka_qb_dev \
 	/bin/bash 
