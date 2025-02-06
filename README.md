@@ -1,7 +1,8 @@
-# Docker ROS NVIDIA
+# Docker_ws
+For practical reasons, the main of this repository i svery similar to the forked one ([this repository](https://github.com/ddebenedittis/docker_ros_nvidia)). If you want updated material you can refer to it.
+The main idea here is that one can use both devcontainer extension and scripts (build and run) to operate with containers. With scripts the container is erased each time. With devcontainer, it is persistent and can be used like a virtual system. Choose a branch to decide the main architecture.
 
 ## Overview
-
 Dockerfiles to build images that have ROS (1 or 2) with NVIDIA support and with GUI support (e.g. Gazebo and RViz).
 
 The `build.bash` and the `run.bash` files are used to automatically build and run the image.
@@ -13,7 +14,6 @@ If you find this useful, you can cite [this repository](https://github.com/ddebe
 
 
 ## Preliminaries
-
 Install [Docker Community Edition](https://docs.docker.com/engine/install/ubuntu/) (ex Docker Engine).
 You can follow the installation method through `apt`.
 Note that it makes you verify the installation by running `sudo docker run hello-world`.
