@@ -5,11 +5,10 @@ cd "$(dirname "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")"
 
 # ================================= Edit Here ================================ #
 
-IMAGE_NAME=ros1_franka_qb
+IMAGE_NAME=debian
 
 # =============================== Preliminaries ============================== #
 
-mkdir -p build log src devel
 mkdir -p ~/.vscode ~/.vscode-server ~/.config/Code
 
 # =============================== Help Function ============================== #

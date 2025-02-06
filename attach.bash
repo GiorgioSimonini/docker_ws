@@ -1,5 +1,5 @@
 #!/bin/bash
 
 docker exec \
-	-it ros1_franka_qb_dev \
+	-it debian_dev \
 	/bin/bash 

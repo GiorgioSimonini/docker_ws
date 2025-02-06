@@ -4,7 +4,7 @@ General purpose docker workspaces to use different systems and developing inside
 The ROS part is very similar to the forked repository, so refer to it. Differently, here each different system has a branch that you can directly clone and use.
 
 ## Overview
-Workspaces to build images with different systems with GUI support (e.g. Gazebo and RViz).
+Workspaces to build images with different systems with GUI support.
 
 The `build.bash` and the `run.bash` files are used to automatically build and run the image.
 `attach.bash` will be added to connect to the same container created with run.
@@ -51,12 +51,8 @@ To use VS Code with Docker, you have two method:
 ## Troubleshooting
 
 ## Authors
-
-[Davide De Benedittis](https://github.com/ddebenedittis)
 [Giorgio Simonini](https://github.com/GiorgioSimonini)
 
 
 ## Acknowledgments
-
-- [Baptiste Busch](https://medium.com/@baptiste.busch/creating-a-ros-or-ros2-workspace-in-docker-part-1-912529c87708): creation of a ROS workspace in Docker
-
+[Davide De Benedittis](https://github.com/ddebenedittis)

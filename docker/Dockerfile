@@ -1,43 +1,17 @@
-# Change ROS version in build.sh, not here!
-ARG BASE_IMAGE=osrf/ros
-ARG BASE_TAG=noetic-desktop
-
-FROM ${BASE_IMAGE}:${BASE_TAG}
+FROM debian:stable
 
 # Prevent bash to ask for user input which may break the building process
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install sudo, and some essential packages
 RUN apt-get update && apt-get install --no-install-recommends -qqy \
+    nano \
     bash-completion \
     build-essential \
     git \
     sudo \
     wget \
     gdb
-
-# Install packages specific for ROS 1
-# RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,sharing=locked,target=/var/lib/apt \
-RUN apt-get update && apt-get install --no-install-recommends -qqy \
-    ros-${ROS_DISTRO}-catkin \
-    python3-catkin-tools \
-    python3-osrf-pycommon \
-    ros-${ROS_DISTRO}-gazebo-ros \
-	ros-${ROS_DISTRO}-rqt \
-	ros-${ROS_DISTRO}-rqt-common-plugins \
-	ros-${ROS_DISTRO}-controller-interface \
-	ros-${ROS_DISTRO}-controller-manager \
-	ros-${ROS_DISTRO}-ros-control \
-	ros-${ROS_DISTRO}-ros-controllers \
-    ros-${ROS_DISTRO}-tf2-geometry-msgs \
-    ros-${ROS_DISTRO}-rviz-visual-tools \
-	ros-${ROS_DISTRO}-plotjuggler-ros
-
-# Install packages specific for Franka and qb devices
-RUN apt-get update && apt-get install --no-install-recommends -qqy \
-    ros-${ROS_DISTRO}-libfranka \
-	ros-${ROS_DISTRO}-franka-ros \
-    ros-${ROS_DISTRO}-qb-move
 
 ARG MYUID=1000
 ARG MYGID=1000
@@ -68,22 +42,21 @@ USER ${USER}
 ENV HOME=/home/${USER}
 
 # Set up environment
-COPY ./docker/.config/update_bashrc.sh /sbin/update_bashrc.sh
-
-RUN sudo chmod +x /sbin/update_bashrc.sh ; sudo chown ${USER} /sbin/update_bashrc.sh \
-    && echo 'echo "source '${PWDR}'/devel/setup.bash" >> ~/.bashrc' >> /sbin/update_bashrc.sh \
-    && cat /sbin/update_bashrc.sh \
-    && sync ; /bin/bash -c /sbin/update_bashrc.sh ; sudo rm /sbin/update_bashrc.sh
+# COPY ./docker/.config/update_bashrc.sh /sbin/update_bashrc.sh
+# RUN sudo chmod +x /sbin/update_bashrc.sh ; sudo chown ${USER} /sbin/update_bashrc.sh \
+#     && echo 'echo "source '${PWDR}'/devel/setup.bash" >> ~/.bashrc' >> /sbin/update_bashrc.sh \
+#     && cat /sbin/update_bashrc.sh \
+#     && sync ; /bin/bash -c /sbin/update_bashrc.sh ; sudo rm /sbin/update_bashrc.sh
 
 # Change entrypoint to source ~/.bashrc and start in ~
-COPY ./docker/.config/entrypoint.sh /ros_entrypoint.sh
-RUN sudo chmod +x /ros_entrypoint.sh ; sudo chown ${USER} /ros_entrypoint.sh \
-    && echo "cd "${PWDR} >> /ros_entrypoint.sh \
-    && echo 'exec bash -i -c $@' >> /ros_entrypoint.sh \
-    && cat /ros_entrypoint.sh
+COPY ./docker/.config/entrypoint.sh /entrypoint.sh
+RUN sudo chmod +x /entrypoint.sh ; sudo chown ${USER} /entrypoint.sh \
+    && echo "cd "${PWDR} >> /entrypoint.sh \
+    && echo 'exec bash -i -c $@' >> /entrypoint.sh \
+    && cat /entrypoint.sh
 
 # Clean image
 RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/ros_entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]
