@@ -1,7 +1,12 @@
 #!/bin/bash
 
 # Navigate to the root directory of the project.
-cd "$(dirname "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")"
+# cd "$(dirname "$(dirname "$(realpath "${BASH_SOURCE[0]}")")")"
+
+# # Debugging statements
+# echo "Current working directory: $PWD"
+# echo "Listing contents of current directory:"
+# ls -la
 
 # ================================= Edit Here ================================ #
 
@@ -66,4 +71,4 @@ docker build \
     --build-arg USER=${USER} \
     --build-arg "PWDR=$PWD" \
     -t $IMAGE_NAME \
-    -f docker/Dockerfile .
+    -f .devcontainer/Dockerfile .

@@ -3,6 +3,9 @@
 {
 	"name": "debian_dev",
 	"image": "debian",
+	// "build": {
+	// 	"dockerfile": "docker/Dockerfile"
+	// },
 
 	// // local mount point
 	// "workspaceMount": "source=${localWorkspaceFolder}/sub-folder,target=/workspace,type=bind,consistency=cached",
@@ -10,7 +13,9 @@
 	// "workspaceFolder": "/workspace",
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	// "features": {
+	// 	"ghcr.io/jungaretti/features/make:1": {}
+	// },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [3000],
@@ -28,11 +33,13 @@
 				"ms-vscode.cpptools-extension-pack",
 				"vscode-icons-team.vscode-icons",
 				"eamodio.gitlens",
-				"ms-iot.vscode-ros",
-				"sandy081.todotasks"
+				"sandy081.todotasks",
+				"github.copilot",
+				"ms-python.python",
+				"ms-vscode.cmake-tools"
 			]
 		}
-	}
+	},
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "containerUser": "docker"

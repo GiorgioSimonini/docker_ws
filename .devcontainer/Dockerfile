@@ -11,8 +11,32 @@ RUN apt-get update && apt-get install --no-install-recommends -qqy \
     git \
     sudo \
     wget \
-    gdb
+    gdb \
+    cmake-curses-gui \
+    curl \
+    ca-certificates
 
+# ----- CMake setup ----- #
+ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="3.22.2"
+
+# Optionally install the cmake for vcpkg
+COPY ./.devcontainer/reinstall-cmake.sh /tmp/
+
+RUN ls -l /tmp/
+
+RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
+        chmod +x /tmp/reinstall-cmake.sh && /tmp/reinstall-cmake.sh ${REINSTALL_CMAKE_VERSION_FROM_SOURCE}; \
+    fi \
+    && rm -f /tmp/reinstall-cmake.sh
+
+# [Optional] Uncomment this section to install additional vcpkg ports.
+# RUN su vscode -c "${VCPKG_ROOT}/vcpkg install <your-port-name-here>"
+
+# [Optional] Uncomment this section to install additional packages.
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
+
+# ----- User setup ----- #
 ARG MYUID=1000
 ARG MYGID=1000
 ARG USER=docker
@@ -36,27 +60,26 @@ RUN OLD_USER=$(awk -v uid="$MYUID" -F ':' '$3==uid {print $1}' /etc/passwd) \
 
 # Choose to run as user
 ENV USER=${USER}
-USER ${USER}
 
 # Change HOME environment variable
 ENV HOME=/home/${USER}
 
 # Set up environment
-# COPY ./docker/.config/update_bashrc.sh /sbin/update_bashrc.sh
+# COPY ./.devcontainer/.config/update_bashrc.sh /sbin/update_bashrc.sh
 # RUN sudo chmod +x /sbin/update_bashrc.sh ; sudo chown ${USER} /sbin/update_bashrc.sh \
 #     && echo 'echo "source '${PWDR}'/devel/setup.bash" >> ~/.bashrc' >> /sbin/update_bashrc.sh \
 #     && cat /sbin/update_bashrc.sh \
 #     && sync ; /bin/bash -c /sbin/update_bashrc.sh ; sudo rm /sbin/update_bashrc.sh
 
 # Change entrypoint to source ~/.bashrc and start in ~
-COPY ./docker/.config/entrypoint.sh /entrypoint.sh
-RUN sudo chmod +x /entrypoint.sh ; sudo chown ${USER} /entrypoint.sh \
+COPY ./.devcontainer/.config/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh ; chown ${USER} /entrypoint.sh \
     && echo "cd "${PWDR} >> /entrypoint.sh \
-    && echo 'exec bash -i -c $@' >> /entrypoint.sh \
-    && cat /entrypoint.sh
+    && echo 'exec bash -i -c $@' >> /entrypoint.sh
 
 # Clean image
-RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+USER ${USER}
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["bash"]
+# CMD ["bash"]
