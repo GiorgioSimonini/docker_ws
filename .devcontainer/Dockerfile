@@ -58,10 +58,8 @@ RUN OLD_USER=$(awk -v uid="$MYUID" -F ':' '$3==uid {print $1}' /etc/passwd) \
         && chmod 0440 /etc/sudoers.d/99_aptget && chown root:root /etc/sudoers.d/99_aptget ; \
     fi
 
-# Choose to run as user
-ENV USER=${USER}
-
 # Change HOME environment variable
+ENV USER=${USER}
 ENV HOME=/home/${USER}
 
 # Set up environment
@@ -72,7 +70,7 @@ ENV HOME=/home/${USER}
 #     && sync ; /bin/bash -c /sbin/update_bashrc.sh ; sudo rm /sbin/update_bashrc.sh
 
 # Change entrypoint to source ~/.bashrc and start in ~
-COPY ./.devcontainer/.config/entrypoint.sh /entrypoint.sh
+COPY ./.devcontainer/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh ; chown ${USER} /entrypoint.sh \
     && echo "cd "${PWDR} >> /entrypoint.sh \
     && echo 'exec bash -i -c $@' >> /entrypoint.sh
@@ -80,6 +78,9 @@ RUN chmod +x /entrypoint.sh ; chown ${USER} /entrypoint.sh \
 # Clean image
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Choose to run as user
 USER ${USER}
+
+# Set entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
 # CMD ["bash"]
