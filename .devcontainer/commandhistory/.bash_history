@@ -1,0 +1,3 @@
+exit
+echo "ciao"
+exit

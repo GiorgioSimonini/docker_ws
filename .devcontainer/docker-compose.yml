@@ -12,6 +12,7 @@ services:
         USER: "${USER}"
         PWDR: "${PWD}"
     env_file: .env
+    shm_size: '1gb'
 
     container_name: ros2_franka_dev
 
@@ -23,8 +24,9 @@ services:
       - DISPLAY=$DISPLAY
       - QT_X11_NO_MITSHM=1
       - XAUTHORITY=/tmp/.docker.xauth
-      # - HISTFILE=/home/.bash_history
-      # - HISTFILESIZE
+      - HISTFILE=${PWD}/.devcontainer/commandhistory/.bash_history
+      - HISTFILESIZE=1000
+      - HISTSIZE=1000
       # PulseAudio
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
       # For matplotlib, etc.
@@ -41,7 +43,7 @@ services:
       - /dev/dri:/dev/dri
       # Current folder
       - ..:${PWD}
-      # Bash history
+      # Bash history (if you want another folder)
       # - ~/.bash_history:/home/.bash_history
       # PulseAudio socket
       - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native
