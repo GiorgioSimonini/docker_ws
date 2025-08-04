@@ -4,3 +4,5 @@ devel/
 log/
 logs/
 .catkin_tools/
+.devcontainer/.env
+.devcontainer/commandhistory/.bash_history

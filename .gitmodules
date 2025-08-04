@@ -1,0 +1,4 @@
+[submodule "franka_ros"]
+	path = src/franka_ros
+	url = https://github.com/frankarobotics/franka_ros/tree/noetic-devel
+    branch = noetic-devel

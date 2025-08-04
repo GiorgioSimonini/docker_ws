@@ -1,9 +1,11 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-	"name": "ros1_franka_qb_dev",
-	"image": "ros1_franka_qb",
-
+	"name": "ROS1 Franka Dev",
+	"initializeCommand": "echo \"MYUID=$(id -u)\\nMYGID=$(id -g)\" > .devcontainer/.env",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "ros1_franka",
+	"workspaceFolder": "${localWorkspaceFolder}",
 	// // local mount point
 	// "workspaceMount": "source=${localWorkspaceFolder}/sub-folder,target=/workspace,type=bind,consistency=cached",
 	// // default path used
@@ -30,14 +32,16 @@
 				"eamodio.gitlens",
 				"github.copilot",
 				"ms-iot.vscode-ros",
-				"sandy081.todotasks"
+				"sandy081.todotasks",
+				"ms-python.python"
 			]
 		}
-	}
+	},
 
 	// Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
 	// "containerUser": "docker"
 
 	// Execute after start container
-	// "postStartCommand": "bash ./.devcontainer/init.bash"
+	"postStartCommand": "bash",
+	"overrideCommand": true
 }

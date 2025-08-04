@@ -1,8 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 # Setup environment
 source $HOME/.bashrc
-
-# Change owner of file
-chown $USER /home/.bash_history

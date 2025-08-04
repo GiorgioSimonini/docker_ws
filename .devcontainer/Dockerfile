@@ -9,7 +9,7 @@ FROM ${BASE_IMAGE}:${BASE_TAG}
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install sudo, and some essential packages
-RUN apt-get update && apt-get install --no-install-recommends -qqy \
+RUN apt update && apt install --no-install-recommends -qqy \
     bash-completion \
     build-essential \
     git \
@@ -17,7 +17,16 @@ RUN apt-get update && apt-get install --no-install-recommends -qqy \
     wget \
     gdb \
     nano \
-    iputils-ping
+    iputils-ping \
+    curl \
+    openssh-client \
+    libeigen3-dev \
+    libpoco-dev \
+    libyaml-cpp-dev \
+    liburdfdom-dev \
+    libfmt-dev \
+    lsb-release \
+    python3-pip
 
 # Install packages specific for ROS 1
 # RUN --mount=type=cache,sharing=locked,target=/var/cache/apt --mount=type=cache,sharing=locked,target=/var/lib/apt \
@@ -38,19 +47,11 @@ RUN apt-get update && apt-get install --no-install-recommends -qqy \
     ros-${ROS_DISTRO}-gazebo-ros-pkgs \
     ros-${ROS_DISTRO}-boost-sml
 
-# depends of libfranka
-RUN apt-get update && apt-get install --no-install-recommends -qqy \
-    libpoco-dev \
-    libeigen3-dev \
-    libfmt-dev \
-    lsb-release \
-    curl
-
-# install pinocchio
-RUN mkdir -p /etc/apt/keyrings \
-    && curl -fsSL http://robotpkg.openrobots.org/packages/debian/robotpkg.asc | sudo tee /etc/apt/keyrings/robotpkg.asc \
-    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | tee /etc/apt/sources.list.d/robotpkg.list \
-    && apt-get update && apt-get install --no-install-recommends -qqy robotpkg-pinocchio
+# # install pinocchio
+# RUN mkdir -p /etc/apt/keyrings \
+#     && curl -fsSL http://robotpkg.openrobots.org/packages/debian/robotpkg.asc | sudo tee /etc/apt/keyrings/robotpkg.asc \
+#     && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | tee /etc/apt/sources.list.d/robotpkg.list \
+#     && apt-get update && apt-get install --no-install-recommends -qqy robotpkg-pinocchio
 
 # install libfranka
 RUN git clone --recurse-submodules https://github.com/frankaemika/libfranka.git  /libfranka \
@@ -116,10 +117,10 @@ RUN groupadd realtime \
 RUN sed -i '/# End of file/i \
 @realtime soft rtprio 99\n\
 @realtime soft priority 99\n\
-@realtime soft memlock 102400\n\
+@realtime soft memlock 1048576\n\
 @realtime hard rtprio 99\n\
 @realtime hard priority 99\n\
-@realtime hard memlock 102400\n' /etc/security/limits.conf
+@realtime hard memlock 1048576\n' /etc/security/limits.conf
 
 # Choose to run as user
 ENV USER=${USER}
@@ -128,23 +129,25 @@ USER ${USER}
 # Change HOME environment variable
 ENV HOME=/home/${USER}
 
-# Set up environment
-COPY ./.devcontainer/update_bashrc.sh /sbin/update_bashrc.sh
-
-RUN sudo chmod +x /sbin/update_bashrc.sh ; sudo chown ${USER} /sbin/update_bashrc.sh \
-    && echo 'echo "source '${PWDR}'/devel/setup.bash" >> ~/.bashrc' >> /sbin/update_bashrc.sh \
-    && cat /sbin/update_bashrc.sh \
-    && sync ; /bin/bash -c /sbin/update_bashrc.sh ; sudo rm /sbin/update_bashrc.sh
+RUN echo "" >> $HOME/.bashrc \
+    && echo "## ROS ##" >> $HOME/.bashrc \
+    && echo "export PS1='[\[\033[1;34m\]DOCKER\[\033[0m\]]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> $HOME/.bashrc \
+    && echo 'source /opt/ros/noetic/setup.bash' >> $HOME/.bashrc \
+    && echo "[ -f \"${PWDR}/build/setup.bash\" ] && source \"${PWDR}/build/setup.bash\"" >> $HOME/.bashrc \
+    && echo "export RCUTILS_COLORIZED_OUTPUT=1" >> $HOME/.bashrc \
+    && echo "export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity} {time}] [{name}]: {message} ({function_name}() at {file_name}:{line_number})'" >> $HOME/.bashrc \
+    && echo "touch ${PWDR}/.devcontainer/commandhistory/.bash_history" >> $HOME/.bashrc \
+    && echo "chown -R $USER ${PWDR}/.devcontainer/commandhistory" >> $HOME/.bashrc
 
 # Change entrypoint to source ~/.bashrc and start in ~
-COPY ./.devcontainer/entrypoint.sh /entrypoint.sh
+COPY ./entrypoint.sh /entrypoint.sh
 RUN sudo chmod +x /entrypoint.sh ; sudo chown ${USER} /entrypoint.sh \
     && echo "cd "${PWDR} >> /entrypoint.sh \
-    && echo 'exec bash -i -c $@' >> /entrypoint.sh \
-    && cat /entrypoint.sh
+    && echo 'exec bash -i -c $@' >> /entrypoint.sh
+    # && cat /entrypoint.sh
 
 # Clean image
-RUN sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/*
+RUN sudo apt clean && sudo rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["bash"]

@@ -1,5 +1,3 @@
 #!/bin/bash
 
-docker exec \
-	-it ros1_franka_qb_dev \
-	/bin/bash 
+docker exec -it ros1_franka_dev ./entrypoint.sh bash
