@@ -43,6 +43,5 @@
 
 	// Execute after start container
 	"postStartCommand": "bash",
-	"overrideCommand": true,
-	"runArgs": ["-it", "--name", "ros2_franka_dev"]
+	"overrideCommand": true
 }
