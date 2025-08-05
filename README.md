@@ -1,16 +1,20 @@
-# Docker_ws
-For practical reasons, the main of this repository i svery similar to the forked one ([this repository](https://github.com/ddebenedittis/docker_ros_nvidia)). If you want updated material you can refer to it.
-The main idea here is that one can use both devcontainer extension and scripts (build and run) to operate with containers. With scripts the container is erased each time. With devcontainer, it is persistent and can be used like a virtual system. Choose a branch to decide the main architecture.
+# Docker_ws - Debian
+
+General purpose docker workspaces to use Debian and developing inside a container.
 
 ## Overview
-Dockerfiles to build images that have ROS (1 or 2) with NVIDIA support and with GUI support (e.g. Gazebo and RViz).
+Workspaces to build images with different systems with GUI support.
 
 The `build.bash` and the `run.bash` files are used to automatically build and run the image.
+`attach.bash` can be used to connect to the same container created with devcontainer.
+To connect to the container created with `run.bash` you can use directly 
+``` docker exec -it <container_name> bash```
 
-This repository is intended to be used as a base for other projects that require ROS, NVIDIA, and GUI support in Docker.
-You can clone it, remove the .git file to start a new repository, and modify the `build.bash`, `run.bash`, and `Dockerfile` files to suit your needs.
+This repository is intended to be used as a base for other projects that require a base system and GUI support in Docker. Providing also the infrastructure for developing inside the container (devcontainer extension).
 
-If you find this useful, you can cite [this repository](https://github.com/ddebenedittis/docker_ros_nvidia) and/or [me](https://github.com/ddebenedittis) in your work.
+The overall idea is to clone the repository and add to .gitignore what you will insert. In this way you can keep track of the modification of the docker structure, while maintaining separate repositories for your works.
+
+If you find this useful, you can cite [this repository](https://github.com/GiorgioSimonini/docker_ws) and/or [me](https://github.com/GiorgioSimonini) in your work.
 
 
 ## Preliminaries
@@ -19,48 +23,50 @@ You can follow the installation method through `apt`.
 Note that it makes you verify the installation by running `sudo docker run hello-world`.
 It is better to avoid running this command with `sudo` and instead follow the post installation steps first and then run the command without `sudo`.
 
-Follow with the [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) for Linux.
+Follow the [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) for Linux.
 This will allow you to run Docker without `sudo`.
 
-Install [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#setting-up-nvidia-container-toolkit) (nvidia-docker2).
-
+You also would probably need [Visual Studio Code](https://code.visualstudio.com/) and the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
 
 ## Usage
-The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE`, `BASE_TAG`, and `ROS_NUMBER` bash variables in `build.bash`. To change the image name, modify `IMAGE_NAME` both in `build.bash` and `run.bash`.
+Clone the repository wherever you want on the system with recursive behavior(better to clone with linux for line endings, not tested with WSL but should work)
+```bash
+git clone --branch debian https://github.com/GiorgioSimonini/docker_ws
+```
 
-Build the docker image (use the `-r` option to update the underlying images):
+The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE` and the `BASE_TAG` in the `.devcontainer/docker-compose.yml`.
+
+The `build.bash` and the `run.bash` files are used to build and run the image from terminal.
+`attach.bash` can be used to connect from the terminal to the same container created with DevContaiers extension.
+
+There are two different ways to use this framework:
+- Using DevContainers that creates a persistent container with name `debian_dev` in which all the installations persists since a new build. This scenario is usefull while you are developing. However, the changes will be lost when you recreate the container, so pay attention.
+- Using the terminal, each container created in this way is erased upon exit and have no persistency. This is better for running demos or execute commands.
+
+### Use with vscode
+Just open the main folder with vscode and click on `Reopen in Container` when asked.
+Or, if you ave already a running container, click on `Attach to Running Container..` int the DevContainers extension.
+
+### Use with terminal
+Build the docker image:
 ```shell
-./docker/build.bash [-r]
+./build.bash
 ```
 
 Run the container:
 ```shell
-./docker/run.bash
+./run.bash
 ```
-
-The workspace directory should be the folder containing `run.bash` and `build.bash`. It is mounted in the Docker container on startup.
-
-Build the workspace inside the Docker container with colcon or catkin to avoid permission problems. The workspace's `setup.bash` is automatically sourced when the container is opened; thus it will fail the first time the container is run.
-
-Take a look at https://docs.docker.com/develop/develop-images/dockerfile_best-practices/ before modifying the Dockerfile according to your needs.
-
-To use VS Code with Docker, you can use the Dev Containers extension to attach VS Code to a running container. For having autocomplete, linting, etc. take a look at https://github.com/athackst/vscode_ros2_workspace and in particular to `c_cpp_properties.json` and `settings.json` in `.vscode`.
-
 
 ## Troubleshooting
 
-- **No GPU available in Docker**: running `nvidia-smi` in the Docker container returns `Failed to initialize NVML: Unknown Error`.\
-  Solution:
-  - Run `sudo nano /etc/nvidia-container-runtime/config.toml`, set `no-cgroups = false`, and save (Ctrl + X and then Y).
-  - Restart Docker with `sudo systemctl restart docker`.
+## Authors
 
-
-## Author
-
-[Davide De Benedittis](https://github.com/ddebenedittis)
+[Giorgio Simonini](https://github.com/GiorgioSimonini)
 
 
 ## Acknowledgments
 
-- [Baptiste Busch](https://medium.com/@baptiste.busch/creating-a-ros-or-ros2-workspace-in-docker-part-1-912529c87708): creation of a ROS workspace in Docker
-- [Official NVIDIA CUDA Docker Images](https://hub.docker.com/r/nvidia/cuda): NVIDIA Drivers in Docker. Uses the `12.x.x-base-ubuntuxx.xx` version. Change it to your liking.
+- [Davide De Benedittis](https://github.com/ddebenedittis)
+- [Docker best practises](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+

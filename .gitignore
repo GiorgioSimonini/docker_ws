@@ -1,5 +1,2 @@
-.catkin_tools/
-build/
-devel/
-logs/
-src/
+.devcontainer/.env
+.devcontainer/commandhistory/.bash_history
