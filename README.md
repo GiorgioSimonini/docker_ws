@@ -24,33 +24,46 @@ You can follow the installation method through `apt`.
 Note that it makes you verify the installation by running `sudo docker run hello-world`.
 It is better to avoid running this command with `sudo` and instead follow the post installation steps first and then run the command without `sudo`.
 
-Follow with the [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) for Linux.
+Follow the [post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/) for Linux.
 This will allow you to run Docker without `sudo`.
 
+You also would probably need [Visual Studio Code](https://code.visualstudio.com/) and the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension
+
 ## Usage
-The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE` and the `BASE_TAG` in the `dockerfile`.
-
-You can simply open the folder in vscode and use the devcontainer extension to create the container and attach to it.
-
-Otherwise you can build the docker image:
-```shell
-./docker/build.bash
+Clone the repository wherever you want on the system with recursive behavior(better to clone with linux for line endings, not tested with WSL but should work)
+```bash
+git clone --branch ros2_franka https://github.com/GiorgioSimonini/docker_ws
 ```
 
-and run the container with:
-```shell
-./docker/run.bash
+The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE` and the `BASE_TAG` in the `.devcontainer/docker-compose.yml`.
+
+The `build.bash` and the `run.bash` files are used to build and run the image from terminal.
+`attach.bash` can be used to connect from the terminal to the same container created with DevContaiers extension.
+
+The first time the container is created on the computer, you probably need to run `./first_compile.bash` that initialize and build the stuffs from Franka. Then, you can compile your ROS2 packages with 
+
+```bash
+colcon build --symlink-install
 ```
 
-The workspace directory should be the folder containing `run.bash` and `build.bash`. It is mounted in the Docker container on startup.
+There are two different ways to use this framework:
+- Using DevContainers that creates a persistent container with name `ros2_franka_dev` in which all the installations persists since a new build. This scenario is usefull while you are developing. However, the changes will be lost when you recreate the container, so pay attention.
+- Using the terminal, each container created in this way is erased upon exit and have no persistency. This is better for running demos or execute commands.
 
-Build the workspace inside the Docker container with colcon or catkin to avoid permission problems. The workspace's `setup.bash` is automatically sourced when the container is opened; thus it will fail the first time the container is run.
+### Use with vscode
+Just open the main folder with vscode and click on `Reopen in Container` when asked.
+Or, if you ave already a running container, click on `Attach to Running Container..` int the DevContainers extension.
 
-Take a look at https://docs.docker.com/develop/develop-images/dockerfile_best-practices/ before modifying the Dockerfile according to your needs.
+### Use with terminal
+Build the docker image:
+```shell
+./build.bash
+```
 
-To use VS Code with Docker, you have two method:
-- you can use the Dev Containers extension to attach VS Code to a running container. For having autocomplete, linting, etc. take a look at https://github.com/athackst/vscode_ros2_workspace and in particular to `c_cpp_properties.json` and `settings.json` in `.vscode`.
-- you can also compile the image from vscode. If the container is opened from vscode, the container will be persistent and you can install what you want without loosing it on code closing. However, the changes will be lost when you recreate the image, so pay attention.
+Run the container:
+```shell
+./run.bash
+```
 
 ## Troubleshooting
 
@@ -63,4 +76,5 @@ To use VS Code with Docker, you have two method:
 
 - [Davide De Benedittis](https://github.com/ddebenedittis)
 - [Baptiste Busch](https://medium.com/@baptiste.busch/creating-a-ros-or-ros2-workspace-in-docker-part-1-912529c87708): creation of a ROS workspace in Docker
+- [Docker best practises](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
 
