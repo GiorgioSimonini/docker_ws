@@ -1,4 +1,4 @@
-# Change ROS version in build.sh, not here!
+# Change ROS version in docker-compose.yml, not here!
 ARG BASE_IMAGE=osrf/ros
 ARG BASE_TAG=noetic-desktop
 # ARG LOCAL_LIBFRANKA_VERSION=0.13.2
