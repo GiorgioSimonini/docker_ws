@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+# set -e
 
 # Setup environment
 source $HOME/.bashrc
