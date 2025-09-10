@@ -69,7 +69,7 @@ RUN git clone --recurse-submodules https://github.com/frankaemika/libfranka.git 
 RUN apt-get update && apt-get install --no-install-recommends -qqy \
     # ros-${ROS_DISTRO}-libfranka \
 	# ros-${ROS_DISTRO}-franka-ros \
-    ros-${ROS_DISTRO}-qb-move
+    ros-${ROS_DISTRO}-qb-move \
     ros-${ROS_DISTRO}-qb-hand
 
 # default USER
