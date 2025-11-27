@@ -134,7 +134,7 @@ RUN echo "" >> $HOME/.bashrc \
     && echo "## ROS ##" >> $HOME/.bashrc \
     && echo "export PS1='[\[\033[1;34m\]DOCKER\[\033[0m\]]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> $HOME/.bashrc \
     && echo 'source /opt/ros/noetic/setup.bash' >> $HOME/.bashrc \
-    && echo "[ -f \"${PWDR}/build/setup.bash\" ] && source \"${PWDR}/build/setup.bash\"" >> $HOME/.bashrc \
+    && echo "[ -f \"${PWDR}/devel/setup.bash\" ] && source \"${PWDR}/devel/setup.bash\"" >> $HOME/.bashrc \
     && echo "export RCUTILS_COLORIZED_OUTPUT=1" >> $HOME/.bashrc \
     && echo "export RCUTILS_CONSOLE_OUTPUT_FORMAT='[{severity} {time}] [{name}]: {message} ({function_name}() at {file_name}:{line_number})'" >> $HOME/.bashrc \
     && echo "touch ${PWDR}/.devcontainer/commandhistory/.bash_history" >> $HOME/.bashrc \
