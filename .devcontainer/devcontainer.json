@@ -4,7 +4,7 @@
 	"name": "ROS2 Franka Dev",
 	"initializeCommand": "echo \"MYUID=$(id -u)\\nMYGID=$(id -g)\" > .devcontainer/.env",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "ros2_franka",
+    "service": "ros2_flexiv",
 	"workspaceFolder": "${localWorkspaceFolder}",
 	// // local mount point
 	// "workspaceMount": "source=${localWorkspaceFolder}/sub-folder,target=/workspace,type=bind,consistency=cached",

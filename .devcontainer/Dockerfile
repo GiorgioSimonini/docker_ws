@@ -1,7 +1,6 @@
 # Change ROS version in docker-compose.yml, not here!
 ARG BASE_IMAGE=ros
 ARG BASE_TAG=humble-ros-base
-# ARG LOCAL_LIBFRANKA_VERSION=0.13.2
 
 FROM ${BASE_IMAGE}:${BASE_TAG}
 
@@ -10,9 +9,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
     LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     ROS_DISTRO=humble
-# Ensure libraries are found at runtime
-# ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/opt/openrobots/lib:${LD_LIBRARY_PATH}"  # LD_LIBRARY_PATH not in the base image
-ENV LD_LIBRARY_PATH="/usr/local/lib:/usr/lib:/opt/openrobots/lib"
 
 # Install sudo, and some essential packages
 RUN apt update && apt install --no-install-recommends -qqy \
@@ -35,18 +31,11 @@ RUN apt update && apt install --no-install-recommends -qqy \
     xterm \
     python3-pip
 
-# install ignition gazebo
-# RUN curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyrings/pkgs-osrf-archive-keyring.gpg
-#     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/pkgs-osrf-archive-keyring.gpg] http://packages.osrfoundation.org/gazebo/ubuntu-stable $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/gazebo-stable.list > /dev/null
-#     && apt-get update \
-#     && apt-get install  -y --no-install-recommends ignition-fortress
-
 # Install some ROS 2 dependencies to create a cache layer
 RUN apt update && apt install -y --no-install-recommends \
     python3-colcon-argcomplete \
     python3-colcon-common-extensions \
     ros-humble-ros-gz \
-    # ros-humble-ign-gazebo \
     ros-humble-sdformat-urdf \
     ros-humble-joint-state-publisher-gui \
     ros-humble-ros2controlcli \
@@ -56,8 +45,6 @@ RUN apt update && apt install -y --no-install-recommends \
     ros-humble-ament-cmake-clang-tidy \
     ros-humble-controller-manager \
     ros-humble-ros2-control-test-assets \
-    # libignition-gazebo6-dev \
-    # libignition-plugin-dev \
     ros-humble-hardware-interface \
     ros-humble-control-msgs \
     ros-humble-backward-ros \
@@ -76,28 +63,8 @@ RUN apt update && apt install -y --no-install-recommends \
     ros-humble-ign-ros2-control \
     ros-humble-rqt-common-plugins
 
-# Install Pinocchio and its dependencies
-RUN mkdir -p /etc/apt/keyrings \
-    && curl -fsSL http://robotpkg.openrobots.org/packages/debian/robotpkg.asc | sudo tee /etc/apt/keyrings/robotpkg.asc \
-    && echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/robotpkg.asc] http://robotpkg.openrobots.org/packages/debian/pub $(lsb_release -cs) robotpkg" | tee /etc/apt/sources.list.d/robotpkg.list \
-    && apt update && apt install --no-install-recommends -qqy robotpkg-pinocchio
-
-# Run ldconfig to update the linker cache
-RUN ldconfig
-RUN apt update && apt install --no-install-recommends -qqy \
-    ros-humble-pinocchio
-
-# install libfranka
-RUN git clone --recurse-submodules https://github.com/frankaemika/libfranka.git  /libfranka \
-    && cd libfranka \
-    # && git checkout 0.15.0 \
-    # && git submodule update \
-    && mkdir build \
-    && cd build \
-    && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/openrobots/lib/cmake -DBUILD_TESTS=OFF .. \
-    && make \
-    && cpack -G DEB \
-    && sudo dpkg -i libfranka*.deb
+# install flexiv dependences
+RUN 
 
 # default USER
 ARG MYUID=1000

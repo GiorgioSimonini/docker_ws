@@ -1,4 +1,4 @@
-# Docker_ws - ROS2_Franka
+# Docker_ws - ROS2_Flexiv
 
 General purpose docker workspaces to use ROS2 and Franka framework and developing inside a container. This is an extension of [docker_ros_nvidia](https://github.com/ddebenedittis/docker_ros_nvidia) from [Davide De Benedittis](https://github.com/ddebenedittis) meant to the ones that wants to use vscode for developing inside a container.
 The ROS part is very similar to the forked repository, so refer to it. Differently, here each different system has a branch that you can directly clone and use.
@@ -32,7 +32,7 @@ You also would probably need [Visual Studio Code](https://code.visualstudio.com/
 ## Usage
 Clone the repository wherever you want on the system with recursive behavior(better to clone with linux for line endings, not tested with WSL but should work)
 ```bash
-git clone --branch ros2_franka https://github.com/GiorgioSimonini/docker_ws
+git clone --branch ros2_flexiv https://github.com/GiorgioSimonini/docker_ws
 ```
 
 The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE` and the `BASE_TAG` in the `.devcontainer/docker-compose.yml`.
@@ -47,7 +47,7 @@ colcon build --symlink-install
 ```
 
 There are two different ways to use this framework:
-- Using DevContainers that creates a persistent container with name `ros2_franka_dev` in which all the installations persists since a new build. This scenario is usefull while you are developing. However, the changes will be lost when you recreate the container, so pay attention.
+- Using DevContainers that creates a persistent container with name `ros2_flexiv_dev` in which all the installations persists since a new build. This scenario is usefull while you are developing. However, the changes will be lost when you recreate the container, so pay attention.
 - Using the terminal, each container created in this way is erased upon exit and have no persistency. This is better for running demos or execute commands.
 
 ### Use with vscode
