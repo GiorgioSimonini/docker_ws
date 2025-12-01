@@ -26,6 +26,9 @@ RUN apt update && apt install --no-install-recommends -qqy \
     libprotobuf-dev \
     protobuf-compiler
 
+RUN apt update && apt install --no-install-recommends -qqy \
+    texlive-full
+
 # # ----- CMake setup ----- #
 # ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="3.22.2"
 

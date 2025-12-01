@@ -1,6 +1,6 @@
-# Docker_ws - Debian
+# Docker_ws - Latex
 
-General purpose docker workspaces to use Debian and developing inside a container.
+General purpose docker workspaces to use Latex with texlive and developing inside a container.
 
 ## Overview
 Workspaces to build images with different systems with GUI support.
@@ -31,7 +31,7 @@ You also would probably need [Visual Studio Code](https://code.visualstudio.com/
 ## Usage
 Clone the repository wherever you want on the system with recursive behavior(better to clone with linux for line endings, not tested with WSL but should work)
 ```bash
-git clone --branch debian https://github.com/GiorgioSimonini/docker_ws
+git clone --branch latex https://github.com/GiorgioSimonini/docker_ws
 ```
 
 The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE` and the `BASE_TAG` in the `.devcontainer/docker-compose.yml`.
@@ -40,7 +40,7 @@ The `build.bash` and the `run.bash` files are used to build and run the image fr
 `attach.bash` can be used to connect from the terminal to the same container created with DevContaiers extension.
 
 There are two different ways to use this framework:
-- Using DevContainers that creates a persistent container with name `debian_dev` in which all the installations persists since a new build. This scenario is usefull while you are developing. However, the changes will be lost when you recreate the container, so pay attention.
+- Using DevContainers that creates a persistent container with name `latex_dev` in which all the installations persists since a new build. This scenario is usefull while you are developing. However, the changes will be lost when you recreate the container, so pay attention.
 - Using the terminal, each container created in this way is erased upon exit and have no persistency. This is better for running demos or execute commands.
 
 ### Use with vscode
