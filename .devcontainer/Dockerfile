@@ -130,6 +130,9 @@ USER ${USER}
 # Change HOME environment variable
 ENV HOME=/home/${USER}
 
+RUN mkdir -p $HOME/.config/catkin \
+    && chown -R $USER $HOME
+
 RUN echo "" >> $HOME/.bashrc \
     && echo "## ROS ##" >> $HOME/.bashrc \
     && echo "export PS1='[\[\033[1;34m\]DOCKER\[\033[0m\]]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '" >> $HOME/.bashrc \
