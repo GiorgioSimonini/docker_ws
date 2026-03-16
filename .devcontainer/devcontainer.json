@@ -1,10 +1,10 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-	"name": "debian_dev",
+	"name": "agent_dev",
 	"initializeCommand": "echo \"MYUID=$(id -u)\\nMYGID=$(id -g)\" > .devcontainer/.env",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "debian",
+    "service": "debian_agent",
 	"workspaceFolder": "${localWorkspaceFolder}",
 
 	// // local mount point

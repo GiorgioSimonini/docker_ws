@@ -1,6 +1,6 @@
-# Docker_ws - Debian
+# Docker_ws - Debian Agent
 
-General purpose docker workspaces to use Debian and developing inside a container.
+General purpose docker workspaces to use Debian and Agents, developing inside a container.
 
 ## Overview
 Workspaces to build images with different systems with GUI support.
@@ -31,7 +31,7 @@ You also would probably need [Visual Studio Code](https://code.visualstudio.com/
 ## Usage
 Clone the repository wherever you want on the system with recursive behavior(better to clone with linux for line endings, not tested with WSL but should work)
 ```bash
-git clone --branch debian https://github.com/GiorgioSimonini/docker_ws
+git clone --branch agent https://github.com/GiorgioSimonini/docker_ws
 ```
 
 The docker base image and the ROS version can be changed by modifying the `BASE_IMAGE` and the `BASE_TAG` in the `.devcontainer/docker-compose.yml`.
