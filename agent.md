@@ -175,9 +175,9 @@ The agent may use any available tool in this workspace (scripts, build tools, la
 3. Choose the next unblocked task.
 4. Implement the necessary code / changes.
 5. Update `tasks.md` and create a new `iteration_k.md` describing progress.
-6. If the iteration creates something that have to be documented, add in the documentation.
+6. Add or update documentation in `docs/` folder.
 7. If any uncertainty arises, add it to `questions.md`.
-8. Update `context.md` keeping in mind that this file is the first readed by the agent.
+8. Update `context.md` with the project actual context.
 9. Commit changes if `git` enabled.
 10. Continue.
 
@@ -208,7 +208,7 @@ If any questions remain, the agent should explicitly note that it is waiting for
 
 ## 8. Documentation structure (human-readable)
 
-This workspace uses a **dedicated `docs/` folder** to hold human-focused documentation about the framework.
+This workspace uses a **dedicated `docs/` folder** to hold documentation about the project.
 
 The docs are **NOT** meant to be a copy of progress status. Progress tracking is handled by:
 - `tasks.md` (backlog)
@@ -218,11 +218,26 @@ The docs are **NOT** meant to be a copy of progress status. Progress tracking is
 Instead, the docs are a set of explanatory markdown files intended to onboard a new agent or human reader.
 The agent should add documentation at the end of each iteration, utilizing the `summary.md` as guide.
 
-### Core docs files
+### 8.1 Documentation—Workspace vs Project
+
+This repository is a **workspace container / tooling environment** (the Docker+DevContainer setup). It also may contain **project-specific code**. The documentation must reflect this distinction:
+
+- **Workspace documentation** (workspace-level setup, build/run instructions, container configuration) belongs in `README.md`.
+  - `README.md` should describe how to build/run/attach to the container, tooling expectations, and how to access the project code.
+
+- **Project documentation** (project-specific guides, demo descriptions, feature docs) should live under `docs/`.
+  - At minimum, create `docs/init.md` as the project’s entry point.
+  - The agent should always generate or update project docs under `docs/` when implementing new features or demos.
+
+When updating docs, ensure the `README.md` references the appropriate `docs/` entry point so users can find the project documentation easily.
+
+### 8.2 Core docs files
 - `docs/init.md` — high-level introduction and quickstart instructions
 - `docs/<topic>.md` — that contain the specific <topic>. Create new topic for each argument that have to be explained detaily.
 
-### Continuing work (handoff)
+---
+
+## 9. Continuing work (handoff)
 
 - When pausing or stopping, update the latest `iteration_<k>.md` and ensure `tasks.md` is accurate.
 - Update `continue.md` with clear next steps (what to work on next and why).
