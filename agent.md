@@ -7,7 +7,7 @@ This file defines the **rules and workflow** for an autonomous agent operating i
 The key principles are:
 - ✅ **Never guess**: if uncertain, ask or record the uncertainty in `questions.md`.
 - ✅ **Top-down + bottom-up reasoning**: plan the overall task, then implement concrete pieces.
-- ✅ **Track state** using explicit files (`tasks.md`, `iteration_k.md`, `questions.md`, and `.agentfw/` for runtime state).
+- ✅ **Track state** using explicit files (`context.md`, `tasks.md`, `iteration_k.md`, `questions.md`).
 - ✅ **Respect user persistence**: do not stop waiting for the user unless there are unresolved questions after a timeout.
 
 ---
@@ -170,14 +170,16 @@ The agent may use any available tool in this workspace (scripts, build tools, la
 
 ## 5. Iteration Lifecycle
 
-1. Review `tasks.md`, `iteration_k.md`, and last `summary.md` to see the current state.
-2. Choose the next unblocked task.
-3. Implement the necessary code / changes.
-4. Update `tasks.md` and create a new `iteration_k.md` describing progress.
-5. If the iteration creates something that have to be documented, add in the documentation.
-6. If any uncertainty arises, add it to `questions.md`.
-7. Commit changes if `git` enabled.
-8. Continue.
+1. Read `context.md`
+2. Review `tasks.md`, `iteration_k.md`, and last `summary.md` to see the current state.
+3. Choose the next unblocked task.
+4. Implement the necessary code / changes.
+5. Update `tasks.md` and create a new `iteration_k.md` describing progress.
+6. If the iteration creates something that have to be documented, add in the documentation.
+7. If any uncertainty arises, add it to `questions.md`.
+8. Update `context.md` keeping in mind that this file is the first readed by the agent.
+9. Commit changes if `git` enabled.
+10. Continue.
 
 ---
 
@@ -194,12 +196,13 @@ If any questions remain, the agent should explicitly note that it is waiting for
 
 ## 7. File Roles (summary)
 
-- `agent.md`: This document (agent behavior and workflow rules)
+- `context.md`: Contains the general context for the agent, only useful informations.
+- `agent.md`: This document (agent behavior and workflow rules).
 - `tasks.md`: High-level task tracker (append-only). If the file is too big, consider to collapse old closed tasks.
-- `iterations/iteration_<k>.md`: Reports per iteration
-- `questions.md`: User-interaction / decision points
-- `continue.md`: Continuation prompt / handoff instructions for the next agent run
-- `implementation_plan.md`: (Optional) Detailed plan for complex changes
+- `iterations/iteration_<k>.md`: Reports per iteration.
+- `questions.md`: User-interaction / decision points.
+- `continue.md`: Continuation prompt / handoff instructions for the next agent run.
+- `implementation_plan.md`: (Optional) Detailed plan for complex changes.
 
 ---
 
